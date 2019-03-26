@@ -74,6 +74,21 @@ server.delete('/api/zoos/:id', (req, res) => {
     });
 });
 
+// PUT
+server.put('/api/zoos/:id', (req, res) => {
+  const { id } = req.params;
+  const newName = req.body.name
+  console.log(newName)
+  db('zoos')
+    .where({ id })
+    .update({ name: newName})
+    .then(data => {
+      res.status(202).json(data)
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+})
 
 const port = 3300;
 server.listen(port, function() {
