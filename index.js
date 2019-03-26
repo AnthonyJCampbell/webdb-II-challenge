@@ -44,17 +44,36 @@ server.get('/api/zoos', (req, res) => {
 //GET BY ID
 server.get('/api/zoos/:id', (req, res) => {
   const { id } = req.params
-  console.log(id)
-  db.select().from('zoos').where({ id: id })
+  db
+    .select()
+    .from('zoos')
+    .where({ id })
     .then(data => {
       res.status(200).json(data)
     })
     .catch(() => {
       res.status(500).json({ 
-        error: "Some useful error message, since you suck at making get by ID requests" 
+        "error": "Some useful error message, since you suck at making get by ID requests" 
       })
     })
 })
+
+// DELETE
+server.delete('/api/zoos/:id', (req, res) => {
+  const { id } = req.params;
+
+  db('zoos')
+    .where({ id }) // or .where(id, '=', id)
+    .del()
+    .then(count => {
+      // count === number of records deleted
+      res.status(200).json(count);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
 
 const port = 3300;
 server.listen(port, function() {
